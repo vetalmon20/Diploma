@@ -16,6 +16,8 @@ import fetchExistingMetadata from '@/Store/Metadata/fetchExistingMetadata'
 import { Avatar as PaperAvatar } from 'react-native-paper'
 import { Image, TouchableWithoutFeedback, ImageBackground } from 'react-native'
 import CITIES from '@/Constants/Cities'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import resetLevel from '@/Store/Level/resetLevel'
 
 const Home = () => {
   const { t } = useTranslation()
@@ -29,6 +31,8 @@ const Home = () => {
 
   const profileInfo = useSelector(state => state.profile.item)
 
+  console.log(profileInfo, ' - profileInfo')
+
   const onProfilePressed = () => {
     navigate('Profile')
   }
@@ -37,15 +41,17 @@ const Home = () => {
     navigate('CityPicker')
   }
 
-  const onStartPressed = () => {
+  const onStartPressed = async () => {
+    await dispatch(resetLevel.action())
     navigate('Level')
+    //dispatch(reset.action())
   }
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: 'orange',
+        backgroundColor: '#fff',
         justifyContent: 'space-evenly',
       }}
     >
@@ -56,20 +62,51 @@ const Home = () => {
           justifyContent: 'space-evenly',
         }}
         source={CITIES[profileInfo.city].picture}
+        //source={source}
       >
-        <TouchableWithoutFeedback onPress={onProfilePressed}>
-          <View style={{ position: 'absolute', top: 40, left: 40 }}>
-            {source && <PaperAvatar.Image size={80} source={source} />}
-            {!source && (
-              <PaperAvatar.Text
-                size={16}
-                label={'initials'}
-                style={{}}
-                color={'red'}
-              />
-            )}
-          </View>
-        </TouchableWithoutFeedback>
+        <View
+          style={{
+            flexDirection: 'row',
+            top: 40,
+            left: 40,
+            position: 'absolute',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <TouchableWithoutFeedback onPress={onProfilePressed}>
+            <View
+              style={{
+                backgroundColor: 'white',
+                height: 80,
+                width: 80,
+                borderRadius: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: 'orange',
+              }}
+            >
+              <MaterialIcons name={'person'} color={'orange'} size={50} />
+            </View>
+          </TouchableWithoutFeedback>
+          {profileInfo && profileInfo.name && (
+            <View
+              style={{
+                marginLeft: 15,
+                paddingHorizontal: 15,
+                paddingVertical: 5,
+                borderRadius: 15,
+                backgroundColor: 'orange',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={{ fontSize: 25, color: '#fff' }}>
+                Hello {profileInfo.name}
+              </Text>
+            </View>
+          )}
+        </View>
 
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <View
@@ -82,10 +119,51 @@ const Home = () => {
               </Text>
             </Text>
           </View>
-          <Button title="Change city" onPress={onChangeCityPressed} />
+          <TouchableWithoutFeedback onPress={onChangeCityPressed}>
+            <View
+              style={{
+                marginTop: 5,
+                backgroundColor: 'white',
+                padding: 10,
+                borderRadius: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: 'orange',
+              }}
+            >
+              <Text style={{ color: 'orange', fontStyle: 'italic' }}>
+                Change
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-
-        <Button title="Start random level" onPress={onStartPressed} />
+        <TouchableWithoutFeedback onPress={onStartPressed}>
+          <View
+            style={{
+              backgroundColor: '#fff',
+              alignSelf: 'center',
+              width: 200,
+              padding: 10,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: '#43bf36',
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '600',
+                color: '#43bf36',
+                fontStyle: 'italic',
+              }}
+            >
+              Start level
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </ImageBackground>
     </View>
   )

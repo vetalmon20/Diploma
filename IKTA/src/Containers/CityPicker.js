@@ -61,7 +61,7 @@ const CityPicker = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: 'orange',
+        backgroundColor: '#fff',
         paddingTop: 10,
       }}
     >

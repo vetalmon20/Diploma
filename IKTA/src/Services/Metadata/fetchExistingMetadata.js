@@ -8,7 +8,7 @@ export default async bounds => {
   let numOfCalls = 0
   let finalData = {}
   let coordinates = {}
-  while (STATUS_CODE != Config.METADATA_STATUS_CODE.OK && numOfCalls < 5) {
+  while (STATUS_CODE != Config.METADATA_STATUS_CODE.OK && numOfCalls < 10) {
     coordinates = generateRandomCoordinates(bounds)
     if (!coordinates.lat || !coordinates.lng) {
       return handleError({
@@ -29,6 +29,10 @@ export default async bounds => {
     '. numOfCalls - ',
     numOfCalls,
   )
+
+  if (numOfCalls === 10) {
+    return {}
+  }
 
   return {
     latitude: coordinates.lat,

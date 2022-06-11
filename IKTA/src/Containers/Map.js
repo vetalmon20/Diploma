@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { View, Button, StyleSheet, Text } from 'react-native'
+import {
+  View,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import Modal from 'react-native-modal'
 
@@ -12,26 +18,36 @@ import { useEffect } from 'react'
 import { navigationRef } from '@/Navigators/utils'
 import StarRating from 'react-native-star-rating-new'
 import addLevelResult from '@/Store/Level/addLevelResult'
+import CITIES from '@/Constants/Cities'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import addResult from '@/Store/Profile/addResult'
 
 const Map = () => {
   const dispatch = useDispatch()
   const { Common, Fonts, Gutters, Layout } = useTheme()
-  const vnCenter = getCenterCoordinates(Config.VN_BOUNDS)
 
   const [marker, setMarker] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
   const [trueMarker, setTrueMarker] = useState(null)
   const [isGuessPressed, setIsGuessPressed] = useState(false)
+
+  const profileInfo = useSelector(state => state.profile.item)
+  const metadataLocation = useSelector(state => state.metadata.item)
+
+  const mapViewRef = React.useRef(null)
+
+  const _cityBounds = profileInfo.city
+    ? CITIES[profileInfo.city].bounds
+    : Config.VN_BOUNDS
+
+  const cityCenter = getCenterCoordinates(_cityBounds)
+
   const [mapCamera, setMapCamera] = useState({
-    center: vnCenter,
+    center: cityCenter,
     pitch: 0,
     heading: 0,
     zoom: 12,
   })
-
-  const metadataLocation = useSelector(state => state.metadata.item)
-
-  const mapViewRef = React.useRef(null)
 
   useEffect(() => {
     return cleanUp
@@ -122,8 +138,11 @@ const Map = () => {
   }
 
   const onGuessPressed = () => {
+    if (!marker) {
+      return
+    }
     console.log('here', metadataLocation.latitude, metadataLocation.longitude)
-    setTrueMarker({
+    const newTrueMarker = {
       coordinate: {
         latitude: metadataLocation.latitude,
         longitude: metadataLocation.longitude,
@@ -131,7 +150,17 @@ const Map = () => {
       title: 'Correct area',
       description: 'You missed it again...',
       pinColor: 'yellow',
-    })
+    }
+    /*setTrueMarker({
+      coordinate: {
+        latitude: metadataLocation.latitude,
+        longitude: metadataLocation.longitude,
+      },
+      title: 'Correct area',
+      description: 'You missed it again...',
+      pinColor: 'yellow',
+    })*/
+    setTrueMarker(newTrueMarker)
     setIsGuessPressed(true)
     if (marker && marker.coordinate) {
       setMapCamera(prev => {
@@ -144,6 +173,11 @@ const Map = () => {
         }
       })
     }
+    const distance = measureDistance(marker, newTrueMarker)
+    console.log(distance, ' - distance', evaluateGrade(distance), ' - grade')
+    dispatch(
+      addResult.action({ distance: distance, rating: evaluateGrade(distance) }),
+    )
   }
 
   const onOKPressed = () => {
@@ -158,6 +192,10 @@ const Map = () => {
     if (trueMarker) {
       setIsVisible(true)
     }
+  }
+
+  const onBackPressed = () => {
+    navigationRef.goBack()
   }
 
   return (
@@ -211,8 +249,8 @@ const Map = () => {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
-          latitude: vnCenter.latitude,
-          longitude: vnCenter.longitude,
+          latitude: cityCenter.latitude,
+          longitude: cityCenter.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -235,7 +273,52 @@ const Map = () => {
           />
         )}
       </MapView>
-      <Button title="Guess" onPress={onGuessPressed} />
+      <TouchableWithoutFeedback onPress={onBackPressed}>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            width: 80,
+            height: 80,
+            borderRadius: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: 1,
+            borderColor: 'orange',
+            position: 'absolute',
+            right: 30,
+            bottom: 40,
+          }}
+        >
+          <MaterialIcons name="arrow-back" color={'orange'} size={37} />
+        </View>
+      </TouchableWithoutFeedback>
+
+      <TouchableWithoutFeedback onPress={onGuessPressed}>
+        <View
+          style={[
+            {
+              backgroundColor: '#fff',
+              width: 80,
+              height: 80,
+              borderRadius: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 1,
+              borderColor: '#43bf36',
+              position: 'absolute',
+              left: 30,
+              bottom: 40,
+            },
+            !marker ? { borderColor: 'grey' } : null,
+          ]}
+        >
+          <MaterialIcons
+            name="check-circle"
+            color={!marker ? 'grey' : '#43bf36'}
+            size={70}
+          />
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   )
 }
@@ -243,7 +326,7 @@ const Map = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'orange',
+    backgroundColor: '#fff',
   },
 
   map: {

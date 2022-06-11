@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { Home, Map, Level, Profile, CityPicker } from '@/Containers'
@@ -7,6 +8,13 @@ const Stack = createStackNavigator()
 
 // @refresh reset
 const MainNavigator = () => {
+  const levelResult = useSelector(state => state.level.item)
+  const profileInfo = useSelector(state => state.profile.item)
+  let levelTitle = profileInfo.city || 'Level'
+  if (levelResult && Array.isArray(levelResult)) {
+    levelTitle = levelTitle + `(${levelResult.length}\\5)`
+  }
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -23,6 +31,7 @@ const MainNavigator = () => {
         options={{
           tabBarIconStyle: { display: 'none' },
           tabBarLabelPosition: 'beside-icon',
+          title: levelTitle,
         }}
       />
       <Stack.Screen

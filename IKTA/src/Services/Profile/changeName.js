@@ -1,7 +1,7 @@
 import { handleError } from '@/Services/api'
 
 export default async (name, store) => {
-  const profileState = store.getState().level.profile
+  const profileState = store.getState().profile.item
 
   if (typeof name !== 'string') {
     handleError({

@@ -1,10 +1,10 @@
 import { buildSlice } from '@thecodingmachine/redux-toolkit-wrapper'
 
-import reset from './reset'
 import addResult from './addResult'
 import changeName from './changeName'
 import changeCity from './changeCity'
 import changePhoto from './changePhoto'
+import resetProfile from './resetProfile'
 
 // This state is common to all the "user" module, and can be modified by any "user" reducers
 const sliceInitialState = {
@@ -18,6 +18,6 @@ const sliceInitialState = {
 
 export default buildSlice(
   'profile',
-  [reset, addResult, changeName, changePhoto, changeCity],
+  [resetProfile, addResult, changeName, changePhoto, changeCity],
   sliceInitialState,
 ).reducer

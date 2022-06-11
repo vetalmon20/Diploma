@@ -12,6 +12,8 @@ target 'IKTA' do
     :hermes_enabled => true
   )
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'IKTATests' do
     inherit! :complete
     # Pods for testing

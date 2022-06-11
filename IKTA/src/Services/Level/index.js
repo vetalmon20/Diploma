@@ -1,2 +1,2 @@
-import rest from './reset'
+import resetLevelService from './resetLevel'
 import addLevelResult from './addLevelResult'
