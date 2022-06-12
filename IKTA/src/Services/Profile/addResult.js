@@ -13,26 +13,11 @@ export default async (res, store) => {
   }
   const { avgRating, avgDistance, length } = profileState.results
 
-  console.log(distance, rating, avgRating, avgDistance, length)
-
   const newLength = length + 1
-  const newAvgRating = (avgRating * length + rating) / newLength
+  const newAvgRating = Math.floor((avgRating * length + rating) / newLength)
   const newAvgDistance = Math.floor(
     (avgDistance * length + distance) / newLength,
   )
-
-  /*console.log(
-    {
-      ...profileState,
-      results: {
-        length: newLength,
-        avgRating: newAvgRating,
-        avgDistance: newAvgDistance,
-      },
-    },
-  )
-
-  return profileState*/
 
   return {
     ...profileState,

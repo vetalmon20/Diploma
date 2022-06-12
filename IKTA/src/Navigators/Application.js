@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, StatusBar } from 'react-native'
+import { StatusBar } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { Bootsplash } from '@/Containers'
@@ -12,7 +12,7 @@ const Stack = createStackNavigator()
 
 // @refresh reset
 const ApplicationNavigator = () => {
-  const { Layout, darkMode, NavigationTheme } = useTheme()
+  const { darkMode, NavigationTheme } = useTheme()
   const { colors } = NavigationTheme
 
   return (

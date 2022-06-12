@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Image, FlatList } from 'react-native'
+import { Text, View, FlatList, StyleSheet } from 'react-native'
 
 const LevelResults = ({ results }) => {
   const _results = results || []
@@ -22,18 +22,7 @@ const LevelResults = ({ results }) => {
   const renderItem = el => {
     const item = el.item
     return (
-      <View
-        style={{
-          height: 140,
-          width: '100%',
-          margin: 15,
-          backgroundColor: '#f8f8f8',
-          borderRadius: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 10,
-        }}
-      >
+      <View style={styles.item}>
         <Text style={{ color: 'black' }}>
           <Text style={{ fontSize: 25 }}>{item.grade}/5</Text> - your grade
         </Text>
@@ -50,22 +39,8 @@ const LevelResults = ({ results }) => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <View
-        style={{
-          backgroundColor: '#e0e386',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-        }}
-      >
+    <View style={styles.container}>
+      <View style={styles.generalStatContainer}>
         <Text style={{ fontSize: 20 }}>
           {averageLevelGrade} - average level grade
         </Text>
@@ -83,5 +58,30 @@ const LevelResults = ({ results }) => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  generalStatContainer: {
+    backgroundColor: '#e0e386',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  item: {
+    height: 140,
+    width: '100%',
+    margin: 15,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+})
 
 export default LevelResults

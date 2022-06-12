@@ -11,7 +11,6 @@ export const getCenterCoordinates = bounds => {
       bounds,
     )
   }
-  console.log(bounds, ' - bounds')
   return {
     latitude: getCenterNumber(bounds.northeast.lat, bounds.southwest.lat),
     longitude: getCenterNumber(bounds.northeast.lng, bounds.southwest.lng),

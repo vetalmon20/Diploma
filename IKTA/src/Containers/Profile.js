@@ -1,29 +1,22 @@
-import { useTranslation } from 'react-i18next'
-import StreetView from 'react-native-streetview'
-import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { View, Text, Button, ImageBase } from 'react-native'
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
-
-import { Config } from '@/Config'
-import { useTheme } from '@/Hooks'
-import { Brand } from '@/Components'
-import { changeTheme } from '@/Store/Theme'
-import { navigate } from '@/Navigators/utils'
-import { generateRandomCoordinates, getCenterCoordinates } from '@/Utils'
-import fetchExistingMetadata from '@/Store/Metadata/fetchExistingMetadata'
-
-import { TextInput, Avatar as PaperAvatar } from 'react-native-paper'
-import { Image, TouchableWithoutFeedback } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import StarRating from 'react-native-star-rating-new'
-import CITIES from '@/Constants/Cities'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useEffect, useRef } from 'react'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import {
+  View,
+  Text,
+  Image,
+  TouchableWithoutFeedback,
+  StyleSheet,
+} from 'react-native'
+
+import CITIES from '@/Constants/Cities'
+import { navigate } from '@/Navigators/utils'
 import changeName from '@/Store/Profile/changeName'
 
 const Profile = () => {
-  const { t } = useTranslation()
   const dispatch = useDispatch()
-  const { Common, Fonts, Gutters, Layout } = useTheme()
 
   const profileInfo = useSelector(state => state.profile.item)
   const [isNameEditingEnabled, setIsNameEditingEnabled] = useState(false)
@@ -71,34 +64,15 @@ const Profile = () => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#ffdd80',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-      }}
-    >
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+    <View style={styles.container}>
+      <View style={styles.nameContainer}>
+        <View style={styles.inputContainer}>
           <TextInput
             ref={nameInputRef}
             placeholder="Name..."
             value={profileInfo.name}
             onChangeText={setNameInputValue}
-            style={{
-              fontSize: 20,
-              lineHeight: 30,
-              height: 70,
-              width: 200,
-              backgroundColor: 'transparent',
-            }}
+            style={styles.input}
             disabled={!isNameEditingEnabled}
             outlineColor={'transparent'}
             underlineColor={'transparent'}
@@ -117,25 +91,19 @@ const Profile = () => {
           />
         </View>
         {isShortName && (
-          <Text style={{ fontWeight: '600', fontSize: 12, color: '#d14415' }}>
+          <Text style={styles.errorNameText}>
             Name should be at least 2 symblos long
           </Text>
         )}
       </View>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ marginBottom: 15, fontSize: 20 }}>
+      <View style={styles.cityContainer}>
+        <Text style={styles.cityText}>
           Current city: {CITIES[profileInfo.city].name}
         </Text>
         <TouchableWithoutFeedback onPress={onChangeCityPressed}>
-          <View style={{ height: 150, width: 150, borderRadius: 10 }}>
+          <View style={styles.imageContainer}>
             <Image
-              style={{
-                height: '100%',
-                width: '100%',
-                resizeMode: 'cover', // or 'stretch'
-                justifyContent: 'space-evenly',
-                borderRadius: 10,
-              }}
+              style={styles.image}
               source={CITIES[profileInfo.city].picture}
             />
           </View>
@@ -148,7 +116,7 @@ const Profile = () => {
             {' '}
             {profileInfo ? profileInfo.results.avgDistance : '0'}{' '}
           </Text>
-          km.
+          m.
         </Text>
         <Text style={{ fontSize: 12 }}>far away from right location</Text>
       </View>
@@ -165,5 +133,55 @@ const Profile = () => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ffdd80',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  nameContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    fontSize: 20,
+    lineHeight: 30,
+    height: 70,
+    width: 200,
+    backgroundColor: 'transparent',
+  },
+  errorNameText: {
+    fontWeight: '600',
+    fontSize: 12,
+    color: '#d14415',
+  },
+  cityContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cityText: {
+    marginBottom: 15,
+    fontSize: 20,
+  },
+  imageContainer: {
+    height: 150,
+    width: 150,
+    borderRadius: 10,
+  },
+  image: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'space-evenly',
+    borderRadius: 10,
+  },
+})
 
 export default Profile

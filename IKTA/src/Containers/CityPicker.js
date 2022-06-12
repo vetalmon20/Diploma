@@ -1,31 +1,22 @@
-import { useTranslation } from 'react-i18next'
-import StreetView from 'react-native-streetview'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, Text, Button, StyleSheet } from 'react-native'
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
-
-import { Config } from '@/Config'
-import { useTheme } from '@/Hooks'
-import { Brand } from '@/Components'
-import { changeTheme } from '@/Store/Theme'
-import { navigate, navigationRef } from '@/Navigators/utils'
-import { generateRandomCoordinates, getCenterCoordinates } from '@/Utils'
-import fetchExistingMetadata from '@/Store/Metadata/fetchExistingMetadata'
-
-import { Avatar as PaperAvatar } from 'react-native-paper'
-import { Image, TouchableWithoutFeedback } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+} from 'react-native'
+
 import CITIES from '@/Constants/Cities'
+import { navigationRef } from '@/Navigators/utils'
 import changeCity from '@/Store/Profile/changeCity'
 
 const CityPicker = () => {
-  const { t } = useTranslation()
   const dispatch = useDispatch()
-  const { Common, Fonts, Gutters, Layout } = useTheme()
 
   const citiesArray = Object.values(CITIES)
-
   const profileInfo = useSelector(state => state.profile.item)
 
   const onCityPressed = async id => {
@@ -34,40 +25,44 @@ const CityPicker = () => {
   }
 
   const renderItem = ({ item }) => {
-    //const image = require(item.picture)
     return (
       <TouchableWithoutFeedback onPress={() => onCityPressed(item.id)}>
-        <View
-          style={{
-            width: '40%',
-            height: 200,
-            marginBottom: 50,
-            marginRight: '5%',
-            marginLeft: '5%',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={{ fontSize: 20 }}>{item.name}</Text>
-          <Image
-            source={item.picture}
-            style={{ height: '100%', width: '100%' }}
-          />
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemText}>{item.name}</Text>
+          <Image source={item.picture} style={styles.itemImage} />
         </View>
       </TouchableWithoutFeedback>
     )
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: 10,
-      }}
-    >
+    <View style={styles.container}>
       <FlatList data={citiesArray} renderItem={renderItem} numColumns={2} />
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 10,
+  },
+  itemContainer: {
+    width: '40%',
+    height: 200,
+    marginBottom: 50,
+    marginRight: '5%',
+    marginLeft: '5%',
+    alignItems: 'center',
+  },
+  itemText: {
+    fontSize: 20,
+  },
+  itemImage: {
+    height: '100%',
+    width: '100%',
+  },
+})
 
 export default CityPicker

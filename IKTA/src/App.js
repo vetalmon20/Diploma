@@ -12,7 +12,6 @@ const App = () => {
     const init = async () => {
       await new Promise(resolve =>
         setTimeout(() => {
-          console.log('bootsplash hiding...')
           resolve(true)
         }, 2000),
       )

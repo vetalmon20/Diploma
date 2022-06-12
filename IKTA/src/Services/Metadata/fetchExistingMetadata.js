@@ -18,17 +18,7 @@ export default async bounds => {
     finalData = await fetchMetadata(coordinates.lat, coordinates.lng)
     STATUS_CODE = finalData.status
     numOfCalls++
-    console.log('STATUS_CODE', STATUS_CODE, 'numOfCalls', numOfCalls)
   }
-
-  console.log(
-    finalData,
-    ' - finalData. Coords:',
-    coordinates.lat,
-    coordinates.lng,
-    '. numOfCalls - ',
-    numOfCalls,
-  )
 
   if (numOfCalls === 10) {
     return {}

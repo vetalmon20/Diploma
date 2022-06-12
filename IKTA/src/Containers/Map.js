@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import Modal from 'react-native-modal'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import {
   View,
   Button,
@@ -7,24 +9,18 @@ import {
   Text,
   TouchableWithoutFeedback,
 } from 'react-native'
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
-import Modal from 'react-native-modal'
 
-import { useTheme } from '@/Hooks'
 import { Config } from '@/Config'
+import CITIES from '@/Constants/Cities'
 import { getCenterCoordinates } from '@/Utils'
-import { useEffect } from 'react'
-
+import addResult from '@/Store/Profile/addResult'
 import { navigationRef } from '@/Navigators/utils'
 import StarRating from 'react-native-star-rating-new'
 import addLevelResult from '@/Store/Level/addLevelResult'
-import CITIES from '@/Constants/Cities'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import addResult from '@/Store/Profile/addResult'
 
 const Map = () => {
   const dispatch = useDispatch()
-  const { Common, Fonts, Gutters, Layout } = useTheme()
 
   const [marker, setMarker] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
@@ -52,16 +48,6 @@ const Map = () => {
   useEffect(() => {
     return cleanUp
   }, [])
-
-  useEffect(() => {
-    if (trueMarker?.coordinate) {
-      console.log(
-        measureDistance(marker, trueMarker),
-        ' - distance!',
-        evaluateGrade(measureDistance(marker, trueMarker)),
-      )
-    }
-  }, [trueMarker])
 
   useEffect(() => {
     if (trueMarker) {
@@ -129,7 +115,6 @@ const Map = () => {
 
   const onMapPress = input => {
     const coords = input.nativeEvent.coordinate
-    console.log(coords, ' - coords')
     setMarker({
       coordinate: { latitude: coords.latitude, longitude: coords.longitude },
       title: 'This area',
@@ -141,7 +126,6 @@ const Map = () => {
     if (!marker) {
       return
     }
-    console.log('here', metadataLocation.latitude, metadataLocation.longitude)
     const newTrueMarker = {
       coordinate: {
         latitude: metadataLocation.latitude,
@@ -151,15 +135,6 @@ const Map = () => {
       description: 'You missed it again...',
       pinColor: 'yellow',
     }
-    /*setTrueMarker({
-      coordinate: {
-        latitude: metadataLocation.latitude,
-        longitude: metadataLocation.longitude,
-      },
-      title: 'Correct area',
-      description: 'You missed it again...',
-      pinColor: 'yellow',
-    })*/
     setTrueMarker(newTrueMarker)
     setIsGuessPressed(true)
     if (marker && marker.coordinate) {
@@ -174,7 +149,6 @@ const Map = () => {
       })
     }
     const distance = measureDistance(marker, newTrueMarker)
-    console.log(distance, ' - distance', evaluateGrade(distance), ' - grade')
     dispatch(
       addResult.action({ distance: distance, rating: evaluateGrade(distance) }),
     )
@@ -202,32 +176,11 @@ const Map = () => {
     <View style={styles.container}>
       <Modal
         isVisible={isVisible}
-        style={{
-          justifyContent: 'flex-end',
-          margin: 0,
-          backgroundColor: '#ffffff1A',
-        }}
+        style={styles.modal}
         swipeDirection={['up', 'left', 'right', 'down']}
       >
-        <View
-          style={
-            {
-              //flex: 1,
-              //justifyContent: 'center',
-              //alignItems: 'center',
-            }
-          }
-        >
-          <View
-            style={{
-              height: 200,
-              width: '100%',
-              backgroundColor: 'white',
-              borderTopLeftRadius: 15,
-              borderTopRightRadius: 15,
-              padding: 15,
-            }}
-          >
+        <View>
+          <View style={styles.modalContainer}>
             <Text style={{ marginBottom: 10 }}>Your guess rating:</Text>
             <StarRating
               disabled={true}
@@ -274,43 +227,14 @@ const Map = () => {
         )}
       </MapView>
       <TouchableWithoutFeedback onPress={onBackPressed}>
-        <View
-          style={{
-            backgroundColor: '#fff',
-            width: 80,
-            height: 80,
-            borderRadius: 40,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: 1,
-            borderColor: 'orange',
-            position: 'absolute',
-            right: 30,
-            bottom: 40,
-          }}
-        >
+        <View style={styles.backButton}>
           <MaterialIcons name="arrow-back" color={'orange'} size={37} />
         </View>
       </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback onPress={onGuessPressed}>
         <View
-          style={[
-            {
-              backgroundColor: '#fff',
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              borderColor: '#43bf36',
-              position: 'absolute',
-              left: 30,
-              bottom: 40,
-            },
-            !marker ? { borderColor: 'grey' } : null,
-          ]}
+          style={[styles.guessButton, !marker ? { borderColor: 'grey' } : null]}
         >
           <MaterialIcons
             name="check-circle"
@@ -328,7 +252,45 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+    backgroundColor: '#ffffff1A',
+  },
+  modalContainer: {
+    height: 200,
+    width: '100%',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    padding: 15,
+  },
+  backButton: {
+    backgroundColor: '#fff',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'orange',
+    position: 'absolute',
+    right: 30,
+    bottom: 40,
+  },
+  guessButton: {
+    backgroundColor: '#fff',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#43bf36',
+    position: 'absolute',
+    left: 30,
+    bottom: 40,
+  },
   map: {
     ...StyleSheet.absoluteFillObject,
   },

@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react'
-import { ActivityIndicator, View, Text } from 'react-native'
-import { useTranslation } from 'react-i18next'
+import { View, Text } from 'react-native'
+
 import { useTheme } from '@/Hooks'
-import { Brand } from '@/Components'
 import { setDefaultTheme } from '@/Store/Theme'
 import { navigateAndSimpleReset } from '@/Navigators/utils'
 
 const StartupContainer = () => {
-  const { Layout, Gutters, Fonts } = useTheme()
-
-  const { t } = useTranslation()
+  const { Layout } = useTheme()
 
   const init = async () => {
     await new Promise(resolve =>
@@ -27,7 +24,9 @@ const StartupContainer = () => {
 
   return (
     <View style={[Layout.fill, Layout.colCenter]}>
-      <Text style={Fonts.textCenter}>Welcome Vitaliy</Text>
+      <Text style={{ fontSize: 40, fontWeight: '700', color: 'orange' }}>
+        IKTA
+      </Text>
     </View>
   )
 }
