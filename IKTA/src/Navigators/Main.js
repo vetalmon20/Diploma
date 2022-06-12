@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { Home, Map, Level, Profile, CityPicker } from '@/Containers'
+import { Home, Map, Level, Profile, CityPicker, Auth } from '@/Containers'
 
 const Stack = createStackNavigator()
 
@@ -12,11 +12,25 @@ const MainNavigator = () => {
   const profileInfo = useSelector(state => state.profile.item)
   let levelTitle = profileInfo.city || 'Level'
   if (levelResult && Array.isArray(levelResult)) {
-    levelTitle = levelTitle + `(${levelResult.length}\\5)`
+    if (levelResult.length === 5) {
+      levelTitle = levelTitle + ' results'
+    } else {
+      levelTitle = levelTitle + `(${levelResult.length + 1}\\5)`
+    }
   }
 
   return (
     <Stack.Navigator>
+      {!profileInfo.pass && (
+        <Stack.Screen
+          name="Auth"
+          component={Auth}
+          options={{
+            tabBarIconStyle: { display: 'none' },
+            tabBarLabelPosition: 'beside-icon',
+          }}
+        />
+      )}
       <Stack.Screen
         name="Home"
         component={Home}

@@ -1,4 +1,5 @@
 export { default as Map } from './Map'
+export { default as Auth } from './Auth'
 export { default as Home } from './Home'
 export { default as Level } from './Level'
 export { default as Profile } from './Profile'

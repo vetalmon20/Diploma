@@ -15,6 +15,7 @@ const StartupContainer = () => {
       }, 2000),
     )
     await setDefaultTheme({ theme: 'default', darkMode: null })
+
     navigateAndSimpleReset('Main')
   }
 

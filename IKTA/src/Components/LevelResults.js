@@ -1,5 +1,9 @@
 import React from 'react'
+import StarRating from 'react-native-star-rating-new'
 import { Text, View, FlatList, StyleSheet } from 'react-native'
+
+const emptyStarImg = require('@/Assets/Images/emptyStar.png')
+const fullStarImg = require('@/Assets/Images/fullStar.png')
 
 const LevelResults = ({ results }) => {
   const _results = results || []
@@ -21,11 +25,17 @@ const LevelResults = ({ results }) => {
 
   const renderItem = el => {
     const item = el.item
+    const i = el.index
     return (
       <View style={styles.item}>
-        <Text style={{ color: 'black' }}>
-          <Text style={{ fontSize: 25 }}>{item.grade}/5</Text> - your grade
-        </Text>
+        <Text style={{ fontSize: 16 }}>Location №{i + 1}</Text>
+        <StarRating
+          disabled={true}
+          maxStars={5}
+          rating={item.grade}
+          emptyStar={emptyStarImg}
+          fullStar={fullStarImg}
+        />
         <Text>
           <Text style={{ fontSize: 25 }}>{item.dist} m</Text> - far away from
           right answer

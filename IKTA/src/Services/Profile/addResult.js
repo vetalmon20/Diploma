@@ -3,6 +3,11 @@ import { handleError } from '@/Services/api'
 export default async (res, store) => {
   const profileState = store.getState().profile.item
 
+  //if user is in anonymous mode
+  if (!profileState.pass) {
+    return profileState
+  }
+
   const { distance, rating } = res
   if (typeof distance !== 'number' || typeof rating !== 'number') {
     handleError({

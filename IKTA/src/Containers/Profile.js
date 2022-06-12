@@ -12,8 +12,9 @@ import {
 } from 'react-native'
 
 import CITIES from '@/Constants/Cities'
-import { navigate } from '@/Navigators/utils'
+import { navigate, navigateAndSimpleReset } from '@/Navigators/utils'
 import changeName from '@/Store/Profile/changeName'
+import resetProfile from '@/Store/Profile/resetProfile'
 
 const Profile = () => {
   const dispatch = useDispatch()
@@ -50,6 +51,11 @@ const Profile = () => {
     navigate('CityPicker')
   }
 
+  const onLogoutPressed = async () => {
+    await dispatch(resetProfile.action())
+    navigateAndSimpleReset('Auth')
+  }
+
   const onEditNamePressed = () => {
     if (isNameEditingEnabled) {
       if (nameInputValue.length < 2) {
@@ -70,13 +76,14 @@ const Profile = () => {
           <TextInput
             ref={nameInputRef}
             placeholder="Name..."
-            value={profileInfo.name}
+            value={profileInfo.name} //TODO
             onChangeText={setNameInputValue}
             style={styles.input}
             disabled={!isNameEditingEnabled}
             outlineColor={'transparent'}
             underlineColor={'transparent'}
             numberOfLines={1}
+            activeOutlineColor={isShortName ? 'tomato' : 'orange'}
             mode={'outlined'}
             selectionColor={'orange'}
             activeUnderlineColor={'orange'}
@@ -92,7 +99,7 @@ const Profile = () => {
         </View>
         {isShortName && (
           <Text style={styles.errorNameText}>
-            Name should be at least 2 symblos long
+            Name should be at least 2 symbols long
           </Text>
         )}
       </View>
@@ -130,6 +137,11 @@ const Profile = () => {
           fullStar={require('@/Assets/Images/fullStar.png')}
         />
       </View>
+      <TouchableWithoutFeedback onPress={onLogoutPressed}>
+        <View style={styles.logoutButton}>
+          <Text style={styles.logoutButtonText}>Delete account</Text>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   )
 }
@@ -181,6 +193,21 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'space-evenly',
     borderRadius: 10,
+  },
+  logoutButton: {
+    backgroundColor: 'orange',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    padding: 10,
+    marginTop: 25,
+  },
+  logoutButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 })
 

@@ -1,3 +1,4 @@
+import setPassService from './setPass'
 import addResultService from './addResult'
 import changeCityService from './changeCity'
 import changeNameService from './changeName'

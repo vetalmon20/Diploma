@@ -1,7 +1,7 @@
 import Modal from 'react-native-modal'
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps'
 import {
   View,
   Button,
@@ -223,6 +223,13 @@ const Map = () => {
             title={trueMarker.title}
             description={trueMarker.description}
             pinColor="green"
+          />
+        )}
+        {marker && isGuessPressed && (
+          <Polyline
+            strokeColor="orange"
+            strokeWidth={3}
+            coordinates={[trueMarker.coordinate, marker.coordinate]}
           />
         )}
       </MapView>

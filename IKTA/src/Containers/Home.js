@@ -18,8 +18,12 @@ const Home = () => {
 
   const profileInfo = useSelector(state => state.profile.item)
 
+  const isUserProfileActive = profileInfo.pass
+
   const onProfilePressed = () => {
-    navigate('Profile')
+    if (isUserProfileActive) {
+      navigate('Profile')
+    }
   }
 
   const onChangeCityPressed = () => {
@@ -39,8 +43,17 @@ const Home = () => {
       >
         <View style={styles.profileContainer}>
           <TouchableWithoutFeedback onPress={onProfilePressed}>
-            <View style={styles.profileButton}>
-              <MaterialIcons name={'person'} color={'orange'} size={50} />
+            <View
+              style={[
+                styles.profileButton,
+                isUserProfileActive ? null : { borderColor: 'grey' },
+              ]}
+            >
+              <MaterialIcons
+                name={'person'}
+                color={isUserProfileActive ? 'orange' : 'grey'}
+                size={50}
+              />
             </View>
           </TouchableWithoutFeedback>
           {profileInfo && profileInfo.name && (
