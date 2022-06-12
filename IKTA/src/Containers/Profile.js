@@ -12,9 +12,9 @@ import {
 } from 'react-native'
 
 import CITIES from '@/Constants/Cities'
-import { navigate, navigateAndSimpleReset } from '@/Navigators/utils'
 import changeName from '@/Store/Profile/changeName'
 import resetProfile from '@/Store/Profile/resetProfile'
+import { navigate, navigateAndSimpleReset } from '@/Navigators/utils'
 
 const Profile = () => {
   const dispatch = useDispatch()
@@ -127,7 +127,7 @@ const Profile = () => {
         </Text>
         <Text style={{ fontSize: 12 }}>far away from right location</Text>
       </View>
-      <View>
+      <View style={{ alignItems: 'center' }}>
         <Text style={{ fontSize: 20 }}>Avg rating:</Text>
         <StarRating
           disabled={true}

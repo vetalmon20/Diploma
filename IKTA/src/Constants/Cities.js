@@ -92,7 +92,7 @@ const CITIES = {
   Zaporizhya: {
     name: 'Zaporizhya',
     id: 'Zaporizhya',
-    picture: require('@/Assets/Images/Cities/Kyiv.jpg'),
+    picture: require('@/Assets/Images/Cities/Zaporizhya.jpg'),
     bounds: {
       northeast: {
         lat: 47.959861,

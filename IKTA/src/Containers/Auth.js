@@ -5,7 +5,7 @@ import { View, Text, TouchableWithoutFeedback, StyleSheet } from 'react-native'
 
 import setPass from '@/Store/Profile/setPass'
 import changeName from '@/Store/Profile/changeName'
-import { navigateAndSimpleReset } from '@/Navigators/utils'
+import { navigate, navigateAndSimpleReset } from '@/Navigators/utils'
 
 const Auth = () => {
   const dispatch = useDispatch()
@@ -36,13 +36,13 @@ const Auth = () => {
 
   const onAnonymousPressed = () => {
     dispatch(changeName.action('Anonymous'))
-    navigateAndSimpleReset('Home')
+    navigate('Home')
   }
 
   return (
     <View style={styles.container}>
       <View style={{ alignItems: 'center' }}>
-        <Text style={{ fontSize: 22 }}>Create a profile:</Text>
+        <Text style={{ fontSize: 22 }}>Create profile:</Text>
         <TextInput
           ref={nameInputRef}
           placeholder="Name"
@@ -86,7 +86,7 @@ const Auth = () => {
         )}
         <TouchableWithoutFeedback onPress={onCreatePressed}>
           <View style={styles.createButton}>
-            <Text style={styles.createButtonText}>Create</Text>
+            <Text style={styles.createButtonText}>Enter</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>

@@ -66,11 +66,8 @@ const Home = () => {
         </View>
         <View style={styles.cityBlockContainer}>
           <View style={styles.cityContainer}>
-            <Text style={{ fontSize: 20 }}>
-              Your city:{' '}
-              <Text style={{ fontSize: 30, fontStyle: 'italic' }}>
-                {CITIES[profileInfo.city].name}
-              </Text>
+            <Text style={{ fontSize: 30, lineHeight: 36, color: 'grey' }}>
+              {CITIES[profileInfo.city].name}
             </Text>
           </View>
           <TouchableWithoutFeedback onPress={onChangeCityPressed}>
@@ -136,11 +133,15 @@ const styles = StyleSheet.create({
   },
   cityContainer: {
     backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
   },
   cityChangeButton: {
-    marginTop: 5,
+    marginTop: 10,
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 10,

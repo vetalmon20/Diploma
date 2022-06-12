@@ -28,6 +28,7 @@ const MainNavigator = () => {
           options={{
             tabBarIconStyle: { display: 'none' },
             tabBarLabelPosition: 'beside-icon',
+            title: 'Authorization',
           }}
         />
       )}
@@ -70,6 +71,7 @@ const MainNavigator = () => {
         options={{
           tabBarIconStyle: { display: 'none' },
           tabBarLabelPosition: 'beside-icon',
+          title: 'Pick your city',
         }}
       />
     </Stack.Navigator>

@@ -51,13 +51,14 @@ const styles = StyleSheet.create({
   itemContainer: {
     width: '40%',
     height: 200,
-    marginBottom: 50,
+    marginBottom: 70,
     marginRight: '5%',
     marginLeft: '5%',
     alignItems: 'center',
   },
   itemText: {
     fontSize: 20,
+    marginBottom: 5,
   },
   itemImage: {
     height: '100%',
